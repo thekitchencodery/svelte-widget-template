@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Example Document</title>
+
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.css">
+
+  <link rel="stylesheet" type="text/css" href="global.css">
+  <script src="bundle.js"></script>
+  <script>
+    // you'll need to change WidgetTemplate to match the name of your component
+    let MainWidget = WidgetTemplate.Main;
+    let SidebarWidget = WidgetTemplate.Sidebar;
+  </script>
+
+</head>
+
+<body>
+  <main class="wrapper">
+    <header class="header">
+      <div class="container">
+        <h1>Embedded Components Example</h1>
+        <p><small>Using <a href="https://milligram.io">Milligram</a> CSS Framework</small></p>
+        <hr style="height:1px;border-width:0;color:gray;background-color:gray" />
+      </div>
+    </header>
+    <section>
+      <div class="container">
+
+        <div class="row">
+          <div class="column column-50 column-offset-25">
+            <div class="row">
+              <div class="column">
+                <p>This button triggers the embedded Sidebar component.</p>
+              </div>
+              <div class="column">
+                <button class="button button-outline float-right" onclick="toggleSidebar()">Toggle Sidebar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:3rem">
+          <div class="column column-50 column-offset-25 messageProvider" id="mainWidget"></div>
+        </div>
+        <div class="row">
+          <div class="column column-50 column-offset-25" id="events">
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- The target for the side bar widget -->
+    <div id='sidebarWidget' class="messageProvider"></div>
+  </main>
+
+
+
+  <script>
+    /* connect the widgets to their target elements */
+    new MainWidget({
+      target: document.getElementById('mainWidget'),
+      props: {},
+    });
+
+    let sidebar = new SidebarWidget({
+      target: document.getElementById('sidebarWidget'),
+      props: {},
+    });
+
+    /* update the sidebar widget's state */
+    function toggleSidebar() {
+      sidebar.show = !sidebar.show;
+    }
+
+
+
+    /* listen to events and update the DOM */
+    document.getElementById('mainWidget').addEventListener('openSidebar', (event) => {
+      if (!sidebar.show) {
+        toggleSidebar();
+        writeMessage("You opened the sidebar");
+      } else {
+        writeMessage("The sidebar is already open");
+      }
+    });
+
+    [...document.querySelectorAll(".messageProvider")].map(
+      (element, index, array) => {
+        element.addEventListener('message', (event) => writeMessage(event.detail.text));
+      }
+    );
+
+    function writeMessage(message) {
+      let elem = document.createElement("blockquote");
+      elem.innerHTML = message;
+
+      let container = document.getElementById('events');
+      container.insertBefore(elem, container.firstChild);
+
+    }
+  </script>
+</body>
+
+</html>
