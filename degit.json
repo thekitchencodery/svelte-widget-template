@@ -3,11 +3,10 @@
 		"action": "remove",
 		"files": [
 			".github",
-			"CODE-OF-CONDUCT.md",
+			"CODE_OF_CONDUCT.md",
 			"CONTRIBUTING.md",
 			"LICENSE",
-			"README.md",
-			"FAQ.md"
+			"README.md"
 		]
 	}
 ]
